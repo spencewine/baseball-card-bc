@@ -19,11 +19,17 @@ export default class User extends Component {
         if (selected) {
             this.setState({
                 tradeArray: [...nextTradeArray, card]
-            }, () => this.props.selectCards(this.props.user.name, this.state.tradeArray))
+            }, () => {
+                this.props.selectCards(this.props.user.name, this.state.tradeArray)
+                this.setState({ tradeArray: [] })
+            })
         } else {
             this.setState({
                 tradeArray: this.state.tradeArray.filter(c => c.id !== card.id)
-            }, () => this.props.selectCards(this.props.user.name, this.state.tradeArray))
+            }, () => {
+                this.props.selectCards(this.props.user.name, this.state.tradeArray)
+                this.setState({ tradeArray: [] })
+            })
         }
 
     }
@@ -39,6 +45,7 @@ export default class User extends Component {
                             key={i}
                             card={card}
                             toggleTradeArray={this.toggleTradeArray.bind(this)}
+                            deselect={this.props.deselect}
                         />
                     })
                 }

@@ -10,6 +10,12 @@ export default class Card extends Component {
         this.toggleTradeCard = this.toggleTradeCard.bind(this)
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.deselect) {
+            this.setState({ selected: false })
+        }
+    }
+
 
     toggleTradeCard() {
         this.setState({
