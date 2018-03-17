@@ -40,10 +40,12 @@ export default class Card extends Component {
 
     return (
     <div style={this.state.selected ? selectedStyle : {}} className="card-container" onClick={this.toggleTradeCard}>
+            <div className="player-data-container player-data-name">
+                <span>{this.props.card.firstName} </span>
+                <span>{this.props.card.lastName}</span>
+            </div>
             <img className="player-image" src={this.props.card.photo} />
             <div className="player-data-container">
-                <div>{this.props.card.firstName}</div>
-                <div>{this.props.card.lastName}</div>
                 <div>{this.props.card.team}</div>
                 <div>{this.props.card.position}</div>
                 <div>2017 Average: {this.convertAverage(this.props.card.avg)}</div>
