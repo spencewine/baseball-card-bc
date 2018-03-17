@@ -20,7 +20,8 @@ export default class Createuser extends Component {
                 team: randomCard.team ? randomCard.team.name : 'No Team',
                 position: randomCard.primary_position,
                 avg: randomCard.avg,
-                photo: randomCard.photo
+                photo: randomCard.photo,
+                id: randomCard.id
             });
         }
         return cards;

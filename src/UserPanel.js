@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import Card from './Card.js';
 
 
-export default class User extends Component{
-    constructor(props){
+export default class User extends Component {
+    constructor(props) {
         super(props)
 
         this.state = {
@@ -12,22 +12,35 @@ export default class User extends Component{
         }
     }
 
-    addToTradeArray(card){
+
+
+    toggleTradeArray(card, selected) {
         const nextTradeArray = this.state.tradeArray.slice()
-        this.setState({
-            tradeArray: [...nextTradeArray, card]
-        }, () => console.log("TRADE ARRAY", this.state.tradeArray))
+        if (selected) {
+            this.setState({
+                tradeArray: [...nextTradeArray, card]
+            }, () => this.props.selectCards(this.props.user.name, this.state.tradeArray))
+        } else {
+            this.setState({
+                tradeArray: this.state.tradeArray.filter(c => c.id !== card.id)
+            }, () => this.props.selectCards(this.props.user.name, this.state.tradeArray))
+        }
 
     }
 
-    render () {
-        const { user, selectCards } = this.props
+    render() {
+        const { user } = this.props
         return (
             <div className="one-user">
                 <h1>{user.name}</h1>
-                { user.cards.map(card => {
-                    return <Card key={card.id} card={card} user={user.name} selectCards={selectCards} addToTradeArray={this.addToTradeArray.bind(this)}/>
-                })
+                {
+                    user.cards.map((card, i) => {
+                        return <Card
+                            key={i}
+                            card={card}
+                            toggleTradeArray={this.toggleTradeArray.bind(this)}
+                        />
+                    })
                 }
             </div>
         )
