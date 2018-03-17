@@ -37,12 +37,12 @@
   padding: 10px;
 }
 
-
 .card-container {
   display: inline-block;
   margin:0 50px;
   border:2px solid white;
 }
+
 .player-image {
   object-fit: contain;
   height:300px;
