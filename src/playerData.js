@@ -77,7 +77,7 @@ module.exports = [
         "last_name": "Turner",
         "jersey_number": "10",
         "id": "893e5243-1278-476c-8801-280b9b14aea7",
-        "photo": "https://cdn.vox-cdn.com/thumbor/YaB16ksybpQw4C541Oljlyr-cwU=/0x0:1704x1132/1200x800/filters:focal(695x377:967x649)/cdn.vox-cdn.com/uploads/chorus_image/image/57160819/861780978.1508126364.jpg"<
+        "photo": "https://cdn.vox-cdn.com/thumbor/YaB16ksybpQw4C541Oljlyr-cwU=/0x0:1704x1132/1200x800/filters:focal(695x377:967x649)/cdn.vox-cdn.com/uploads/chorus_image/image/57160819/861780978.1508126364.jpg",
         "status": "A",
         "position": "IF",
         "primary_position": "3B",
@@ -95,7 +95,7 @@ module.exports = [
         "last_name": "Votto",
         "jersey_number": "19",
         "id": "f6a52aa9-6607-445b-a6cb-34a73b1859f9",
-        "photo": "https://cdn.vox-cdn.com/thumbor/YaB16ksybpQw4C541Oljlyr-cwU=/0x0:1704x1132/1200x800/filters:focal(695x377:967x649)/cdn.vox-cdn.com/uploads/chorus_image/image/57160819/861780978.1508126364.jpg"
+        "photo": "https://cdn.vox-cdn.com/thumbor/YaB16ksybpQw4C541Oljlyr-cwU=/0x0:1704x1132/1200x800/filters:focal(695x377:967x649)/cdn.vox-cdn.com/uploads/chorus_image/image/57160819/861780978.1508126364.jpg",
         "status": "A",
         "position": "IF",
         "primary_position": "1B",

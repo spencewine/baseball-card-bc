@@ -26,3 +26,25 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.one-user {
+  box-sizing: border-box;
+  min-height: 50vh;
+  width: 100%;
+  margin:20px;
+  background: grey;
+  border:2px solid white;
+  padding: 10px;
+}
+
+
+.card-container {
+  display: inline-block;
+  margin:0 50px;
+  border:2px solid white;
+}
+.player-image {
+  object-fit: contain;
+  height:300px;
+  width: 200px;
+}
