@@ -40,7 +40,7 @@ export default class Card extends Component {
 
     return (
     <div style={this.state.selected ? selectedStyle : {}} className="card-container" onClick={this.toggleTradeCard}>
-            <div className="player-data-container player-data-name">
+            <div className="player-data-name">
                 <span>{this.props.card.firstName} </span>
                 <span>{this.props.card.lastName}</span>
             </div>
