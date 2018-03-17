@@ -8,13 +8,22 @@ class App extends Component {
   constructor (props) {
     super (props)
     this.state = {blockchain: new Blockchain()}
+    this.addUserToChain = this.addUserToChain.bind(this);
+
   }
+
+  addUserToChain (dataObj) {
+    const timeStamp = new Date();
+    const newBlock = new Block(timeStamp, dataObj)
+    this.state.blockchain.addBlock(newBlock);
+    console.log(this.state.blockchain.chain);
+  };
 
   render() {
     console.log(this.state.blockchain)
     return (
       <div className="App">
-        <Createuser blockchain={this.state.blockchain} />
+        <Createuser addUserToChain={this.addUserToChain} blockchain={this.state.blockchain} />
       </div>
     );
   }

@@ -15,7 +15,9 @@ export default class Createuser extends Component {
 
     createUser () {
         console.log(this.state.userName);
-
+        const uName = this.state.userName;
+        const newPack = this.generateStarterPack();
+        this.props.addUserToChain({ name:uName, cards:newPack});
     }
 
     handleChange (e) {
