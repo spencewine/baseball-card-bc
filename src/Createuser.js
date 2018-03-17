@@ -19,7 +19,8 @@ export default class Createuser extends Component {
                 lastName: randomCard.last_name,
                 team: randomCard.team ? randomCard.team.name : 'No Team',
                 position: randomCard.primary_position,
-                avg: randomCard.avg
+                avg: randomCard.avg,
+                photo: randomCard.photo
             });
         }
         return cards;
@@ -29,6 +30,7 @@ export default class Createuser extends Component {
         const uName = this.state.userName;
         const newPack = this.generateStarterPack();
         this.props.addUserToChain({ name: uName, cards: newPack });
+        this.setState({ userName: "" });
     }
 
     handleChange(e) {
