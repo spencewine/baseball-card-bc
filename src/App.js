@@ -16,13 +16,17 @@ class App extends Component {
 
         //gets player data for 2017 batting title leaders
         let data = await axios.get(secrets.sportradarStats)
-        let mlbBattingLeaders = data.data.leagues[0].hitting.batting_average.players
-        mlbBattingLeaders.map((player) => {
+        const mlbBattingLeaders = data.data.leagues[0].hitting.batting_average.players
+
+        const newArray = mlbBattingLeaders.map((player) => {
             const playerURL = secrets.playerProfile(player.id)
             return axios.get(playerURL)
         })
 
-        const PlayerDATA = await Promise.all(mlbBattingLeaders)
+        const PlayerDATA = await Promise.all(newArray)
+
+        // playerWithPhotoData = playerData.map(())
+        console.log("mlbBattingLeaders", PlayerDATA)
     }
 
   render() {
