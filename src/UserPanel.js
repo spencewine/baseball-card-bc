@@ -32,7 +32,7 @@ export default class User extends Component {
         const { user } = this.props
         return (
             <div className="one-user">
-                <h1>{user.name}</h1>
+                <h1 className="user-name">{user.name}</h1>
                 {
                     user.cards.map((card, i) => {
                         return <Card

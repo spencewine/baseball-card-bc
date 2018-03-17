@@ -20,20 +20,28 @@ export default class Card extends Component {
 
     }
 
+    convertAverage(string) {
+        const average = Number(string) * 1000;
+        return average.toString();
+    };
 
     render() {
         const selectedStyle = {
-            borderColor: 'green'
+            backgroundColor: '#b1f99d',
         }
 
         return (
             <div style={this.state.selected ? selectedStyle : {}} className="card-container" onClick={this.toggleTradeCard}>
+                <div className="player-data-name">
+                    <span>{this.props.card.firstName} </span>
+                    <span>{this.props.card.lastName}</span>
+                </div>
                 <img className="player-image" src={this.props.card.photo} />
-                <h3>{this.props.card.firstName}</h3>
-                <h3>{this.props.card.lastName}</h3>
-                <h3>{this.props.card.team}</h3>
-                <h3>{this.props.card.position}</h3>
-                <h3>{this.props.card.avg}</h3>
+                <div className="player-data-container">
+                    <div>{this.props.card.team}</div>
+                    <div>{this.props.card.position}</div>
+                    <div>2017 Average: {this.convertAverage(this.props.card.avg)}</div>
+                </div>
             </div>
         )
     }
