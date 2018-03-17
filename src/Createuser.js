@@ -40,7 +40,7 @@ export default class Createuser extends Component {
     render() {
         return (
             <div>
-                <h1>Create a new user.</h1>
+                <h1>Create a new user</h1>
                 <input type="text" value={this.state.userName} onChange={this.handleChange} />
                 <button onClick={this.createUser}>Create</button>
             </div>

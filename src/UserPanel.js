@@ -9,7 +9,7 @@ export default class User extends Component{
 
         return (
             <div className="one-user">
-                <h1>{this.props.user.name}</h1>
+                <h1 className="user-name" >{this.props.user.name}</h1>
                 { this.props.user.cards.map(card => {
                     return <Card key={card.id} card={card} />
                 }) 
