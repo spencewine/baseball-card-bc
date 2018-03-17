@@ -39,5 +39,3 @@ const CryptoJs = require("crypto-js");
 
     // }
 }
-
-
