@@ -12,13 +12,24 @@ class App extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { 
-      blockchain: new Blockchain(), 
+    this.state = {
+      blockchain: new Blockchain(),
       playerData: PlayerData,
-      users: []
+      users: [],
+      cardsToSwap: {}
     }
+
     this.addUserToChain = this.addUserToChain.bind(this);
     this.getUsersFromChain = this.getUsersFromChain.bind(this);
+    this.selectCards =  this.selectCards.bind(this)
+  }
+
+  selectCards(user, cards){
+        if (Object.keys(this.state.cardsdToSwap).length< 2) {
+            this.setState({
+                cardsToSwap:{[user]: cards}
+          })
+      }
   }
 
   addUserToChain(dataObj) {
@@ -53,7 +64,7 @@ class App extends Component {
         <div className="user-panel">
           {
             this.state.users.map(user => (
-              <User key={user.name} user={user} />
+              <User key={user.name} user={user} selectCards={this.selectCards} cardsToSwap={this.state.cardsToSwap}/>
             ))
           }
         </div>
