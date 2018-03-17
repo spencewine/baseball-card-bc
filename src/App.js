@@ -1,8 +1,23 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
+import secrets from './secrets'
 
 class App extends Component {
+    async componentDidMount(){
+
+        //gets player data for 2017 batting title leaders
+        let data = await axios.get(secrets.sportradarStats)
+        let mlbBattingLeaders = data.data.leagues[0].hitting.batting_average.players
+        mlbBattingLeaders.map((player) => {
+            const playerURL = secrets.playerProfile(player.id)
+            return axios.get(playerURL)
+        })
+
+        const PlayerDATA = await Promise.all(mlbBattingLeaders)
+    }
+
   render() {
     return (
       <div className="App">
