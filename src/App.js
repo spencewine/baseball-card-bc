@@ -23,78 +23,64 @@ class App extends Component {
 
     this.addUserToChain = this.addUserToChain.bind(this);
     this.getUsersFromChain = this.getUsersFromChain.bind(this);
-    this.selectCards = this.selectCards.bind(this);
     this.tradeCards = this.tradeCards.bind(this);
+    this.addCard = this.addCard.bind(this);
+    this.removeCard = this.removeCard.bind(this);
+    this.checkSelected = this.checkSelected.bind(this);
   }
 
-  selectCards(user, cards) {
-    if (Object.keys(this.state.cardsToSwap).length < 2) {
-      this.setState({
-        cardsToSwap: { ...this.state.cardsToSwap, [user]: cards }
-      })
+  addCard(user, card) {
+    const cardArr = this.state.cardsToSwap[user.name]
+    const cards = cardArr ? cardArr.concat([card]) : [card];
+    this.setState({
+      cardsToSwap: { ...this.state.cardsToSwap, [user.name]: cards }
+    }, () => console.log('CARDS TO SWAP ADDED', this.state.cardsToSwap))
+  }
+
+  removeCard(user, card) {
+    const index = this.state.cardsToSwap[user.name].findIndex(c => c.id === card.id);
+    const cards = this.state.cardsToSwap[user.name].slice();
+    cards.splice(index, 1)
+    this.setState({
+      cardsToSwap: { ...this.state.cardsToSwap, [user.name]: cards }
+    }, () => console.log('CARDS TO SWAP REMOVED', this.state.cardsToSwap))
+  }
+
+  checkSelected(user, card) {
+    if (!this.state.cardsToSwap[user.name]) {
+      return false;
     }
+    return this.state.cardsToSwap[user.name].findIndex(c => c.id === card.id) > -1;
   }
 
   tradeCards() {
     const tradeObject = {}
     const userName1 = Object.keys(this.state.cardsToSwap)[0];
     const userName2 = Object.keys(this.state.cardsToSwap)[1];
-    const user1CardsExiting = Object.values(this.state.cardsToSwap)[0];
-    const user2CardsExiting = Object.values(this.state.cardsToSwap)[1];
+    const user1CardsToSwap = Object.values(this.state.cardsToSwap)[0];
+    const user2CardsToSwap = Object.values(this.state.cardsToSwap)[1];
     const user1 = this.state.users.find(user => user.name === userName1)
     const user2 = this.state.users.find(user => user.name === userName2)
-    const user1CardsRemoved = user1.cards.reduce((arr, card) => {
-      if (!user1CardsExiting.find(c => c.id === card.id)) {
+    const user1Cards = user1.cards.reduce((arr, card) => {
+      if (!user1CardsToSwap.find(c => c.id === card.id)) {
         arr.push(card);
       }
       return arr;
-    }, [])
-    const user2CardsRemoved = user2.cards.reduce((arr, card) => {
-      if (!user2CardsExiting.find(c => c.id === card.id)) {
+    }, []).concat(user2CardsToSwap)
+    const user2Cards = user2.cards.reduce((arr, card) => {
+      if (!user2CardsToSwap.find(c => c.id === card.id)) {
         arr.push(card);
       }
       return arr;
-    }, [])
-    const user1CardsAdded = user1CardsRemoved.concat(user2CardsExiting);
-    const user2CardsAdded = user2CardsRemoved.concat(user1CardsExiting);
+    }, []).concat(user1CardsToSwap)
     this.state.blockchain.addBlock(new Block(
       new Date(),
-      Object.assign({}, user1, { cards: user1CardsAdded })
+      Object.assign({}, user1, { cards: user1Cards })
     ))
     this.state.blockchain.addBlock(new Block(
       new Date(),
-      Object.assign({}, user2, { cards: user2CardsAdded })
+      Object.assign({}, user2, { cards: user2Cards })
     ))
-    // this.state.users.forEach(user => {
-    //   if (user.name === userName1) {
-    //     let newCardArray = [];
-    //     user1CardsExiting.forEach(card => {
-    //       const index = user.cards.findIndex(c => c.id === card.id);
-    //       newCardArray = user.cards.filter(c => !(c.id === card.id));
-    //     })
-    //     user.cards = [...newCardArray, ...user2CardsExiting]
-    //     this.state.blockchain.addBlock(new Block(
-    //       new Date(),
-    //       user
-    //     ))
-
-    //   }
-    //   if (user.name === userName2) {
-    //     let newCardArray = [];
-    //     user2CardsExiting.forEach(card => {
-    //       const index = user.cards.findIndex(c => c.id === card.id);
-    //       // user.cards.splice(index, 1)
-    //       newCardArray = user.cards.filter(c => !(c.id === card.id));
-    //     })
-    //     user.cards = [...newCardArray, ...user1CardsExiting]
-    //     this.state.blockchain.addBlock(new Block(
-    //       new Date(),
-    //       user
-    //     ))
-
-
-    //   }
-    // })
     this.getUsersFromChain();
     this.setState({ cardsToSwap: {}, deselect: true }, () => {
       this.setState({ deselect: false })
@@ -118,12 +104,15 @@ class App extends Component {
         users[block.data.name] = block.data;
       }
     }
-    const sortedUsers = Object.values(users).sort()
+    const sortedUsers = Object.values(users).sort((a, b) => {
+      if (a.name < b.name) return -1;
+      if (a.name > b.name) return 1;
+      return 0;
+    })
     this.setState({ users: sortedUsers })
   }
 
   render() {
-    console.log(this.state.blockchain)
     return (
       <div className="App">
         <Createuser
@@ -134,17 +123,14 @@ class App extends Component {
         <TradeButton tradeCards={this.tradeCards} />
         <div className="user-panel">
           {
-            this.state.users.sort((a, b) => {
-              if (a.name < b.name) return -1;
-              if (a.name > b.name) return 1;
-              return 0;
-            }).map(user => (
+            this.state.users.map(user => (
               <User
                 key={user.name}
                 user={user}
-                selectCards={this.selectCards}
                 cardsToSwap={this.state.cardsToSwap}
-                deselect={this.state.deselect}
+                addCard={this.addCard}
+                removeCard={this.removeCard}
+                checkSelected={this.checkSelected}
               />
             ))
           }
