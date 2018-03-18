@@ -1,55 +1,22 @@
-import React, { Component } from 'react';
-
+import React from 'react';
 import Card from './Card.js';
 
-
-export default class User extends Component {
-    constructor(props) {
-        super(props)
-
-        this.state = {
-            tradeArray: []
-        }
+const User = ({ user, removeCard, addCard, checkSelected }) => (
+  <div className="one-user">
+    <h1 className="user-name">{user.name}</h1>
+    {
+      user.cards.map((card, i) => {
+        return <Card
+          key={i}
+          card={card}
+          removeCard={removeCard}
+          addCard={addCard}
+          checkSelected={checkSelected}
+          user={user}
+        />
+      })
     }
+  </div>
+)
 
-
-
-    toggleTradeArray(card, selected) {
-        const nextTradeArray = this.state.tradeArray.slice()
-        if (selected) {
-            this.setState({
-                tradeArray: [...nextTradeArray, card]
-            }, () => {
-                this.props.selectCards(this.props.user.name, this.state.tradeArray)
-                this.setState({ tradeArray: [] })
-            })
-        } else {
-            this.setState({
-                tradeArray: this.state.tradeArray.filter(c => c.id !== card.id)
-            }, () => {
-                this.props.selectCards(this.props.user.name, this.state.tradeArray)
-                this.setState({ tradeArray: [] })
-            })
-        }
-
-    }
-
-    render() {
-        const { user } = this.props
-        return (
-            <div className="one-user">
-                <h1 className="user-name">{user.name}</h1>
-                {
-                    user.cards.map((card, i) => {
-                        return <Card
-                            key={i}
-                            card={card}
-                            toggleTradeArray={this.toggleTradeArray.bind(this)}
-                            deselect={this.props.deselect}
-                        />
-                    })
-                }
-            </div>
-        )
-    }
-}
+export default User;
