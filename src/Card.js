@@ -1,54 +1,42 @@
 import React, { Component } from 'react';
-export default class Card extends Component {
-    constructor(props) {
-        super(props)
 
-        this.state = {
-            selected: false,
-        }
+const Card = ({ user, card, checkSelected, removeCard, addCard }) => {
 
-        this.toggleTradeCard = this.toggleTradeCard.bind(this)
+  function handleClick() {
+    if (checkSelected(user, card)) {
+      removeCard(user, card);
+    } else {
+      addCard(user, card);
     }
+  }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.deselect) {
-            this.setState({ selected: false })
-        }
-    }
+  function convertAverage(string) {
+    const average = Number(string) * 1000;
+    return average.toString();
+  };
 
+  const selectedStyle = {
+    backgroundColor: '#b1f99d',
+  };
 
-    toggleTradeCard() {
-        this.setState({
-            selected: !this.state.selected
-        }, () => {
-            this.props.toggleTradeArray(this.props.card, this.state.selected)
-        })
-
-    }
-
-    convertAverage(string) {
-        const average = Number(string) * 1000;
-        return average.toString();
-    };
-
-    render() {
-        const selectedStyle = {
-            backgroundColor: '#b1f99d',
-        }
-
-        return (
-            <div style={this.state.selected ? selectedStyle : {}} className="card-container" onClick={this.toggleTradeCard}>
-                <div className="player-data-name">
-                    <span>{this.props.card.firstName} </span>
-                    <span>{this.props.card.lastName}</span>
-                </div>
-                <img className="player-image" src={this.props.card.photo} />
-                <div className="player-data-container">
-                    <div>{this.props.card.team}</div>
-                    <div>{this.props.card.position}</div>
-                    <div>2017 Average: {this.convertAverage(this.props.card.avg)}</div>
-                </div>
-            </div>
-        )
-    }
+  return (
+    <div
+      style={checkSelected(user, card) ? selectedStyle : {}}
+      className="card-container"
+      onClick={handleClick}
+    >
+      <div className="player-data-name">
+        <span>{card.firstName} </span>
+        <span>{card.lastName}</span>
+      </div>
+      <img className="player-image" src={card.photo} />
+      <div className="player-data-container">
+        <div>{card.team}</div>
+        <div>{card.position}</div>
+        <div>2017 Average: {convertAverage(card.avg)}</div>
+      </div>
+    </div>
+  )
 }
+
+export default Card;
