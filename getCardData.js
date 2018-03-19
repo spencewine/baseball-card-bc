@@ -55,4 +55,21 @@ function writeToFile(data, file) {
   })
 }
 
+function addImagesToPlayers() {
+  const promiseArray = [];
+  allPlayers.forEach(player => {
+    promiseArray.push(
+      getImageLink(player.preferred_name, player.last_name)
+        .then(link => {
+          player.photo = link;
+          return player;
+        })
+    )
+  })
+  return Promise.all(promiseArray)
+    .then(playersWithPhotos => writeToFile(playersWithPhotos, 'players.json'))
+}
+
+// addImagesToPlayers()
+
 // getImageLink('Ryan', 'Braun')
