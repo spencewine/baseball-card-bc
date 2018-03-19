@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 const Card = ({ user, card, checkSelected, removeCard, addCard }) => {
 
@@ -29,7 +29,7 @@ const Card = ({ user, card, checkSelected, removeCard, addCard }) => {
         <span>{card.firstName} </span>
         <span>{card.lastName}</span>
       </div>
-      <img className="player-image" src={card.photo} />
+      <img className="player-image" alt={`${card.firstName} ${card.lastName}`} src={card.photo} />
       <div className="player-data-container">
         <div>{card.team}</div>
         <div>{card.position}</div>
