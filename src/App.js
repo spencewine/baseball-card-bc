@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import Createuser from './Createuser.js';
 import './App.css';
-import axios from 'axios';
-import secrets from './secrets'
 
 import { Block, Blockchain } from './blockchain.js'
 import PlayerData from './playerData';
@@ -54,7 +52,6 @@ class App extends Component {
   }
 
   tradeCards() {
-    const tradeObject = {}
     const userName1 = Object.keys(this.state.cardsToSwap)[0];
     const userName2 = Object.keys(this.state.cardsToSwap)[1];
     const user1CardsToSwap = Object.values(this.state.cardsToSwap)[0];
