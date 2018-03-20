@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+const crypto = require("crypto-js");
 
 export default class Createuser extends Component {
     constructor(props) {
@@ -21,7 +21,8 @@ export default class Createuser extends Component {
                 position: randomCard.primary_position,
                 avg: randomCard.avg,
                 photo: randomCard.photo,
-                id: randomCard.id
+                id: randomCard.id,
+                uuid: crypto.SHA256(randomCard.last_name, new Date().toString(), Math.random().toString())
             });
         }
         return cards;

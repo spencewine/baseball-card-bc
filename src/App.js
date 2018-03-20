@@ -36,7 +36,7 @@ class App extends Component {
   }
 
   removeCard(user, card) {
-    const index = this.state.cardsToSwap[user.name].findIndex(c => c.id === card.id);
+    const index = this.state.cardsToSwap[user.name].findIndex(c => c.uuid === card.uuid);
     const cards = this.state.cardsToSwap[user.name].slice();
     cards.splice(index, 1)
     this.setState({
@@ -48,7 +48,7 @@ class App extends Component {
     if (!this.state.cardsToSwap[user.name]) {
       return false;
     }
-    return this.state.cardsToSwap[user.name].findIndex(c => c.id === card.id) > -1;
+    return this.state.cardsToSwap[user.name].findIndex(c => c.uuid === card.uuid) > -1;
   }
 
   tradeCards() {
@@ -59,13 +59,13 @@ class App extends Component {
     const user1 = this.state.users.find(user => user.name === userName1)
     const user2 = this.state.users.find(user => user.name === userName2)
     const user1Cards = user1.cards.reduce((arr, card) => {
-      if (!user1CardsToSwap.find(c => c.id === card.id)) {
+      if (!user1CardsToSwap.find(c => c.uuid === card.uuid)) {
         arr.push(card);
       }
       return arr;
     }, []).concat(user2CardsToSwap)
     const user2Cards = user2.cards.reduce((arr, card) => {
-      if (!user2CardsToSwap.find(c => c.id === card.id)) {
+      if (!user2CardsToSwap.find(c => c.uuid === card.uuid)) {
         arr.push(card);
       }
       return arr;
