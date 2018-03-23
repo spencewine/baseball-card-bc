@@ -5,7 +5,7 @@
 
 ## Installation
 
-run `npm install`
+run `npm install`<br>
 run `npm start`
 
 ## Future Features
