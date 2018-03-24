@@ -21,7 +21,7 @@ class App extends Component {
     }
 
     this.addUserToChain = this.addUserToChain.bind(this);
-    this.getUsersFromChain = this.getUsersFromChain.bind(this);
+    // this.getUsersFromChain = this.getUsersFromChain.bind(this);
     this.tradeCards = this.tradeCards.bind(this);
     this.addCard = this.addCard.bind(this);
     this.removeCard = this.removeCard.bind(this);
@@ -79,8 +79,13 @@ class App extends Component {
       new Date(),
       Object.assign({}, user2, { cards: user2Cards })
     ))
-    this.getUsersFromChain();
-    this.setState({ cardsToSwap: {}, deselect: true }, () => {
+    // this.getUsersFromChain();
+    const users = this.state.blockchain.getUsers();
+    this.setState({
+      cardsToSwap: {},
+      deselect: true,
+      users
+    }, () => {
       this.setState({ deselect: false })
     })
 
@@ -90,25 +95,27 @@ class App extends Component {
     const timeStamp = new Date();
     const newBlock = new Block(timeStamp, dataObj)
     this.state.blockchain.addBlock(newBlock);
-    this.getUsersFromChain();
+    // this.getUsersFromChain();
+    const users = this.state.blockchain.getUsers();
+    this.setState({ users })
   };
 
-  getUsersFromChain() {
-    let users = {};
-    const currentChain = this.state.blockchain.chain;
-    for (let i = currentChain.length - 1; i >= 1; i--) {
-      const block = currentChain[i];
-      if (!users[block.data.name]) {
-        users[block.data.name] = block.data;
-      }
-    }
-    const sortedUsers = Object.values(users).sort((a, b) => {
-      if (a.name < b.name) return -1;
-      if (a.name > b.name) return 1;
-      return 0;
-    })
-    this.setState({ users: sortedUsers })
-  }
+  // getUsersFromChain() {
+  //   let users = {};
+  //   const currentChain = this.state.blockchain.chain;
+  //   for (let i = currentChain.length - 1; i >= 1; i--) {
+  //     const block = currentChain[i];
+  //     if (!users[block.data.name]) {
+  //       users[block.data.name] = block.data;
+  //     }
+  //   }
+  //   const sortedUsers = Object.values(users).sort((a, b) => {
+  //     if (a.name < b.name) return -1;
+  //     if (a.name > b.name) return 1;
+  //     return 0;
+  //   })
+  //   this.setState({ users: sortedUsers })
+  // }
 
   render() {
     return (
