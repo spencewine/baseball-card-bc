@@ -3,7 +3,8 @@ import Createuser from './Createuser.js';
 import './App.css';
 
 import { Block, Blockchain } from './blockchain.js'
-import PlayerData from './playerData';
+// import PlayerData from './playerData';
+import PlayerData from './playerDataFinal.json'
 import User from './UserPanel.js';
 import TradeButton from './TradeButton';
 
