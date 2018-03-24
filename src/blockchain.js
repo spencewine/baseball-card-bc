@@ -1,4 +1,4 @@
-const CryptoJs = require("crypto-js");
+const crypto = require("crypto-js");
 
 
 export class Blockchain {
@@ -8,18 +8,18 @@ export class Blockchain {
   };
 
   createGenesis() {
-    return new Block("03/17/2018", "genesisblock")
+    return new Block("03/17/2018", "genesisblock");
   }
 
   getLastBlock() {
-    return this.chain[this.chain.length - 1]
+    return this.chain[this.chain.length - 1];
   }
 
   addBlock(newBlock) {
     newBlock.prevHash = this.getLastBlock().hash;
     newBlock.hash = newBlock.calculateHash();
     this.chain.push(newBlock);
-    console.log('BLOCKCHAIN', this.chain)
+    console.log('BLOCKCHAIN', this.chain);
   }
 }
 
@@ -33,6 +33,6 @@ export class Block {
   }
 
   calculateHash() {
-    return CryptoJs.SHA256(this.prevHash + this.timestamp + JSON.stringify(this.data)).toString();
+    return crypto.SHA256(this.prevHash + this.timestamp + JSON.stringify(this.data)).toString();
   }
 }
