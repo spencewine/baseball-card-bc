@@ -8,7 +8,7 @@
 ## Installation
 
 run `npm install`<br>
-run `npm start`
+run `npm start`<br>
 navigate to `localhost:3000` in chrome
 
 ## Future Features
