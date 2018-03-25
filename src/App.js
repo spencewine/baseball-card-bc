@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import crypto from 'crypto-js';
 import Createuser from './Createuser.js';
 import './App.css';
 
 import { Block, Blockchain } from './blockchain.js'
-import PlayerData from './playerData';
-import User from './UserPanel.js';
+// import PlayerData from './playerData';
+import PlayerData from './playerDataFinal.json'
+import User from './User.js';
 import TradeButton from './TradeButton';
 
 class App extends Component {
@@ -16,15 +18,55 @@ class App extends Component {
       playerData: PlayerData,
       users: [],
       cardsToSwap: {},
-      deselect: false
+      rewardData: {}
     }
 
-    this.addUserToChain = this.addUserToChain.bind(this);
-    this.getUsersFromChain = this.getUsersFromChain.bind(this);
+    this.addBlockToChain = this.addBlockToChain.bind(this);
     this.tradeCards = this.tradeCards.bind(this);
     this.addCard = this.addCard.bind(this);
     this.removeCard = this.removeCard.bind(this);
     this.checkSelected = this.checkSelected.bind(this);
+    this.createCard = this.createCard.bind(this);
+    this.generateStarterPack = this.generateStarterPack.bind(this);
+    this.getReward = this.getReward.bind(this);
+    this.validateCardsToSwap = this.validateCardsToSwap.bind(this);
+  }
+
+  createCard() {
+    const randomNum = Math.floor(Math.random() * PlayerData.length);
+    const randomCard = PlayerData[randomNum];
+    return {
+      firstName: randomCard.preferred_name || randomCard.first_name,
+      lastName: randomCard.last_name,
+      team: randomCard.team ? randomCard.team.name : 'No Team',
+      position: randomCard.primary_position,
+      avg: randomCard.avg,
+      photo: randomCard.photo,
+      id: randomCard.id,
+      uuid: crypto.SHA256(randomCard.last_name, new Date().toString(), Math.random().toString())
+    }
+  }
+
+  generateStarterPack() {
+    // UNCOMMENT TO VIEW ALL CARDS
+    // for (let i = 0; i < PlayerData.length; i++) {
+    //   const card = PlayerData[i];
+    //   cards.push({
+    //     firstName: card.preferred_name || card.first_name,
+    //     lastName: card.last_name,
+    //     team: card.team ? card.team.name : 'No Team',
+    //     position: card.primary_position,
+    //     avg: card.avg,
+    //     photo: card.photo,
+    //     id: card.id,
+    //     uuid: crypto.SHA256(card.last_name, new Date().toString(), Math.random().toString())
+    //   })
+    // }
+    const cards = [];
+    for (let i = 0; i < 3; i++) {
+      cards.push(this.createCard());
+    }
+    return cards;
   }
 
   addCard(user, card) {
@@ -36,7 +78,7 @@ class App extends Component {
   }
 
   removeCard(user, card) {
-    const index = this.state.cardsToSwap[user.name].findIndex(c => c.id === card.id);
+    const index = this.state.cardsToSwap[user.name].findIndex(c => c.uuid === card.uuid);
     const cards = this.state.cardsToSwap[user.name].slice();
     cards.splice(index, 1)
     this.setState({
@@ -48,7 +90,7 @@ class App extends Component {
     if (!this.state.cardsToSwap[user.name]) {
       return false;
     }
-    return this.state.cardsToSwap[user.name].findIndex(c => c.id === card.id) > -1;
+    return this.state.cardsToSwap[user.name].findIndex(c => c.uuid === card.uuid) > -1;
   }
 
   tradeCards() {
@@ -59,65 +101,69 @@ class App extends Component {
     const user1 = this.state.users.find(user => user.name === userName1)
     const user2 = this.state.users.find(user => user.name === userName2)
     const user1Cards = user1.cards.reduce((arr, card) => {
-      if (!user1CardsToSwap.find(c => c.id === card.id)) {
+      if (!user1CardsToSwap.find(c => c.uuid === card.uuid)) {
         arr.push(card);
       }
       return arr;
     }, []).concat(user2CardsToSwap)
     const user2Cards = user2.cards.reduce((arr, card) => {
-      if (!user2CardsToSwap.find(c => c.id === card.id)) {
+      if (!user2CardsToSwap.find(c => c.uuid === card.uuid)) {
         arr.push(card);
       }
       return arr;
     }, []).concat(user1CardsToSwap)
-    this.state.blockchain.addBlock(new Block(
-      new Date(),
-      Object.assign({}, user1, { cards: user1Cards })
-    ))
-    this.state.blockchain.addBlock(new Block(
-      new Date(),
-      Object.assign({}, user2, { cards: user2Cards })
-    ))
-    this.getUsersFromChain();
-    this.setState({ cardsToSwap: {}, deselect: true }, () => {
-      this.setState({ deselect: false })
-    })
-
+    const u1DataObj = Object.assign({}, user1, {
+      cards: user1Cards,
+      type: 'trade',
+      from: userName2,
+      cardsReceived: user2CardsToSwap
+    });
+    const u2DataObj = Object.assign({}, user2, {
+      cards: user2Cards,
+      type: 'trade',
+      from: userName1,
+      cardsReceived: user1CardsToSwap
+    });
+    this.addBlockToChain(u1DataObj);
+    this.addBlockToChain(u2DataObj);
+    this.setState({ cardsToSwap: {} })
   }
 
-  addUserToChain(dataObj) {
-    const timeStamp = new Date();
-    const newBlock = new Block(timeStamp, dataObj)
+  getReward(user) {
+    const card = this.createCard();
+    const cards = user.cards.concat([card]);
+    const data = Object.assign({}, user, {
+      cards,
+      type: 'reward',
+      reward: card
+    })
+    this.addBlockToChain(data);
+  }
+
+  addBlockToChain(dataObj, callback = () => { }) {
+    const timestamp = new Date();
+    const newBlock = new Block(timestamp, dataObj)
     this.state.blockchain.addBlock(newBlock);
-    this.getUsersFromChain();
+    const { users, rewardData } = this.state.blockchain.getChainData();
+    this.setState({ users, rewardData });
   };
 
-  getUsersFromChain() {
-    let users = {};
-    const currentChain = this.state.blockchain.chain;
-    for (let i = currentChain.length - 1; i >= 1; i--) {
-      const block = currentChain[i];
-      if (!users[block.data.name]) {
-        users[block.data.name] = block.data;
-      }
-    }
-    const sortedUsers = Object.values(users).sort((a, b) => {
-      if (a.name < b.name) return -1;
-      if (a.name > b.name) return 1;
-      return 0;
-    })
-    this.setState({ users: sortedUsers })
+  validateCardsToSwap() {
+    return !(Object.keys(this.state.cardsToSwap).length === 2)
   }
 
   render() {
     return (
       <div className="App">
         <Createuser
-          addUserToChain={this.addUserToChain}
+          addBlockToChain={this.addBlockToChain}
           blockchain={this.state.blockchain}
-          playerData={this.state.playerData}
+          generateStarterPack={this.generateStarterPack}
         />
-        <TradeButton tradeCards={this.tradeCards} />
+        <TradeButton
+          tradeCards={this.tradeCards}
+          disabled={this.validateCardsToSwap()}
+        />
         <div className="user-panel">
           {
             this.state.users.map(user => (
@@ -128,6 +174,8 @@ class App extends Component {
                 addCard={this.addCard}
                 removeCard={this.removeCard}
                 checkSelected={this.checkSelected}
+                rewardCount={this.state.rewardData[user.name]}
+                getReward={this.getReward}
               />
             ))
           }

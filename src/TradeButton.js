@@ -1,8 +1,8 @@
 import React from 'react';
 
-const TradeButton = ({ tradeCards }) => {
+const TradeButton = ({ tradeCards, disabled }) => {
   return (
-    <button onClick={tradeCards}>TRADE</button>
+    <button disabled={disabled} onClick={tradeCards}>TRADE</button>
   )
 }
 
