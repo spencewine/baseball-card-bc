@@ -13,7 +13,7 @@ navigate to `localhost:3000` in browser
 
 ## Future Features
 
-* Create a block-chain display component fixed to right side that shows each block as they're added to the chain.
+* Create a block-chain display component fixed to right side that shows each block as its added to the chain.
 
 ## Contributors
 
