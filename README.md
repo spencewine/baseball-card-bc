@@ -9,7 +9,7 @@
 
 run `npm install`<br>
 run `npm start`<br>
-navigate to `localhost:3000` in chrome
+navigate to `localhost:3000` in browser
 
 ## Future Features
 
