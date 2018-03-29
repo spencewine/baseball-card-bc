@@ -83,3 +83,17 @@ body {
   text-align: left;
   margin-bottom: 10px;
 }
+
+.react-json-view {
+  right: 0;
+  font-family: monospace;
+  cursor: default;
+  background-color: rgba(0, 0, 0, 0);
+  position: absolute;
+  text-align: left;
+  width: 20%;
+  /* left: 0; */
+  top: 0;
+  height: 100vh;
+  overflow: scroll;
+}

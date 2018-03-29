@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import crypto from 'crypto-js';
 import Createuser from './Createuser.js';
+
 import './App.css';
 
 import { Block, Blockchain } from './blockchain.js'
@@ -8,6 +9,13 @@ import { Block, Blockchain } from './blockchain.js'
 import PlayerData from './playerDataFinal.json'
 import User from './User.js';
 import TradeButton from './TradeButton';
+
+import ReactJson from 'react-json-view';
+
+const divStyle = {
+  position: "fixed"
+};
+
 
 class App extends Component {
 
@@ -179,7 +187,9 @@ class App extends Component {
               />
             ))
           }
+          
         </div>
+        <ReactJson style={divStyle} src={this.state.blockchain} indentWidth={0} theme="brewer"/>
       </div>
     );
   }
